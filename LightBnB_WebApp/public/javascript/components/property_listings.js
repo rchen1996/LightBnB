@@ -29,7 +29,6 @@ $(() => {
     }
     appended.then(() => {
       $('.new-reservation-form').on('submit', function(event) {
-        console.log('hello!')
         event.preventDefault();
         views_manager.show('none');
     
