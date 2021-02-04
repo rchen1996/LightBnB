@@ -20,7 +20,27 @@ $(() => {
           <footer class="property-listing__footer">
             <div class="property-listing__rating">${Math.round(property.average_rating * 100) / 100}/5 stars</div>
             <div class="property-listing__price">$${property.cost_per_night/100.0}/night</div>
-            <button class="make-reservation">Make Reservation</button>
+            <form action="/api/reservations" method="post" id="reservation-form" class="reservation-form">
+              <p>Make Reservation</p>
+        
+              <div class="reservation-form__field-wrapper">
+                <label for="start">Start Date:</label>
+                <input type="date" name="start_date" id="reservation-form__start">
+              </div>
+        
+              <div class="reservation-form__field-wrapper">
+                <label for="end">End Date:</label>
+                <input type="date" name="end_date" id="reservation-form__end">
+              </div>
+
+              <div class="reservation-form__field-wrapper">
+                <input type="hidden" name="property_id" id="reservation-form__id" value="${property.id}">
+              </div>
+        
+              <div class="reservation-form__field-wrapper">
+                <button class="make-reservation" type="submit">Make Reservation</button>
+              </div>
+            </form>
           </footer>
         </section>
       </article>
@@ -28,5 +48,21 @@ $(() => {
   }
 
   window.propertyListing.createListing = createListing;
+
+  $('.make-reservation').on('submit', function(event) {
+    event.preventDefault();
+
+    views_manager.show('none');
+
+    const data = $(this).serialize();
+    submitReservation(data)
+      .then(() => {
+        views_manager.show('listings');
+      })
+      .catch((error) => {
+        console.error(error);
+        views_manager.show('listings');
+      });
+  })
 
 });
