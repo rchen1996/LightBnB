@@ -12,6 +12,9 @@ $(() => {
   function addListing(listing) {
     $propertyListings.append(listing);
   }
+
+  const appended = new Promise(addListing);
+  
   function clearListings() {
     $propertyListings.empty();
   }
@@ -24,6 +27,23 @@ $(() => {
       const listing = propertyListing.createListing(property, isReservation);
       addListing(listing);
     }
+    appended.then(() => {
+      $('.new-reservation-form').on('submit', function(event) {
+        console.log('hello!')
+        event.preventDefault();
+        views_manager.show('none');
+    
+        const data = $(this).serialize();
+        submitReservation(data)
+          .then(() => {
+            views_manager.show('listings');
+          })
+          .catch((error) => {
+            console.error(error);
+            views_manager.show('listings');
+          });
+      });
+    })
   }
   window.propertyListings.addProperties = addProperties;
 
