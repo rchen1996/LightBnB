@@ -39,7 +39,7 @@ module.exports = function(router, database) {
     const userId = req.session.userId;
     database.addReservation({...req.body, guest_id: userId})
       .then(reservation => {
-        res.send(property);
+        res.send(reservation);
       })
       .catch(e => {
         console.error(e);
